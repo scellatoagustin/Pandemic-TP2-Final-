@@ -5,47 +5,66 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ReglaInfeccion reglaInfeccion = new InfeccionSimple();
+        ReglaInfeccion reglaInfeccion = new InfeccionPuntos();
         JuegoInfeccion juego = new JuegoInfeccion(reglaInfeccion);
 
         System.out.println("🌍 Bienvenido al simulador de infección de ciudades!");
         System.out.println("Las ciudades disponibles son: New York, Paris, Tokyo, Berlin, Moscow, Sydney.");
 
-        juego.mostrarConexionesCiudades();
+        juego.mostrarEstadoCiudades();
 
-        System.out.print("\n🦠 Ingresa el nombre de la ciudad inicial de infección: ");
-        String ciudadInicial = scanner.nextLine();
-        juego.iniciarInfeccion(ciudadInicial);
+        String ciudadActual;
+        while (true) {
+            System.out.print("\n🦠 Ingresa el nombre de la ciudad inicial de infección: ");
+            ciudadActual = scanner.nextLine().trim();
+            if (juego.ciudadExiste(ciudadActual)) {
+                break;
+            }
+            System.out.println("Ciudad no válida. Ingresa una ciudad de la lista.");
+        }
 
+        juego.iniciarInfeccion(ciudadActual);
         System.out.println("\nEstado inicial:");
         juego.mostrarEstadoCiudades();
 
         while (juego.quedanCiudadesSanas()) {
-            System.out.print("\n¿Deseas expandir la infección? (S/N): ");
-            String respuesta = scanner.nextLine().trim().toLowerCase();
+            System.out.println("\nPuntos de infección disponibles: " + juego.getPuntosDeInfeccion());
 
-            if (!respuesta.equals("s")) {
-                System.out.println("Fin de la simulación. Gracias por jugar!");
-                break;
+            Ciudad ciudad = juego.getCiudades().get(ciudadActual);
+            System.out.println("\nCiudades conectadas a " + ciudadActual + ":");
+            ciudad.getCiudadesConectadas().forEach(c ->
+                    System.out.println("  - " + c.getNombre() + " (" + (c.isInfectada() ? "Infectada" : "Sana") + ")"));
+
+            System.out.print("\nIngresa la ciudad a la que te quieres mover: ");
+            String ciudadDestino = scanner.nextLine().trim();
+
+            if (!juego.ciudadExiste(ciudadDestino) || !ciudad.getCiudadesConectadas().contains(juego.getCiudades().get(ciudadDestino))) {
+                System.out.println("Ciudad no válida o no conectada. Intenta nuevamente.");
+                continue;
             }
 
-            juego.expandirInfeccion();
-            System.out.println("\nEstado después de la expansión:");
-            juego.mostrarEstadoCiudades();
+            Ciudad ciudadDestinoObj = juego.getCiudades().get(ciudadDestino);
+            juego.moverEntreCiudades(ciudad, ciudadDestinoObj);
+            ciudadActual = ciudadDestino; // Actualizar la ciudad actual
+
+            if (juego.getPuntosDeInfeccion() >= 3) {
+                System.out.println("\n¿Quieres intentar infectar la ciudad " + ciudadDestino + "? (sí/no)");
+                String respuesta = scanner.nextLine().trim();
+                if (respuesta.equalsIgnoreCase("si")) {
+                    if (reglaInfeccion.infectarCiudad(ciudadDestinoObj, juego.getPuntosDeInfeccion())) {
+                        juego.ganarPuntoInfeccion();
+                    }
+                }
+            }
+
+            juego.curarCiudades();
 
             if (juego.juegoTerminado()) {
-                System.out.println("\n🎉 ¡Todas las ciudades han sido infectadas! Fin de la simulación.");
+                System.out.println("🦠 ¡El juego ha terminado! Todas las ciudades están infectadas.");
                 break;
             }
-        }
-
-        if (!juego.quedanCiudadesSanas()) {
-            System.out.println("\n🏆 ¡Felicidades! Lograste infectar todas las ciudades.");
-        } else {
-            System.out.println("\nJuego terminado.");
         }
 
         scanner.close();
     }
 }
-
