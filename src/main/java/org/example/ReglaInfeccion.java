@@ -1,7 +1,7 @@
 package org.example;
 
 public interface ReglaInfeccion {
-    void infectarCiudad(Ciudad ciudad);
+    boolean infectarCiudad(Ciudad ciudad, int puntosInfeccion);
+    void moverCiudad(Ciudad ciudad, Ciudad destino);
 }
-
 
