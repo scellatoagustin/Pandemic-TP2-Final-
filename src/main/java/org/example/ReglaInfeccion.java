@@ -1,5 +1,5 @@
 package org.example;
 
 public interface ReglaInfeccion {
-    boolean infectarCiudad(Ciudad ciudad);
+    boolean intentarInfectar(Ciudad ciudad);
 }

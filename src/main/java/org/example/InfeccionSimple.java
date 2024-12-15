@@ -2,8 +2,8 @@ package org.example;
 
 public class InfeccionSimple implements ReglaInfeccion {
 
-    @Override
-    public boolean infectarCiudad(Ciudad ciudad) {
+
+    public boolean intentarInfectar(Ciudad ciudad) {
         if (!ciudad.isInfectada()) {
             ciudad.setInfectada(true);
             System.out.println("🔴 Ciudad " + ciudad.getNombre() + " ha sido infectada.");

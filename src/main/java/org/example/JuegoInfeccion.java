@@ -15,7 +15,7 @@ public class JuegoInfeccion {
     }
 
     private void inicializarCiudades() {
-        // Crear ciudades.
+
         Ciudad newYork = new Ciudad("New York");
         Ciudad paris = new Ciudad("Paris");
         Ciudad tokyo = new Ciudad("Tokyo");
@@ -23,7 +23,7 @@ public class JuegoInfeccion {
         Ciudad moscow = new Ciudad("Moscow");
         Ciudad sydney = new Ciudad("Sydney");
 
-        // Conectar ciudades.
+
         newYork.conectarCiudad(paris);
         newYork.conectarCiudad(tokyo);
         paris.conectarCiudad(berlin);
@@ -32,7 +32,7 @@ public class JuegoInfeccion {
         berlin.conectarCiudad(sydney);
         sydney.conectarCiudad(tokyo);
 
-        // Agregar ciudades al mapa.
+
         ciudades.put(newYork.getNombre(), newYork);
         ciudades.put(paris.getNombre(), paris);
         ciudades.put(tokyo.getNombre(), tokyo);
@@ -60,5 +60,13 @@ public class JuegoInfeccion {
                 .stream()
                 .map(Ciudad::getNombre)
                 .collect(Collectors.joining(", "));
+    }
+
+    public void intentarInfectarCiudad(Ciudad ciudad) {
+        if (ciudad != null) {
+            reglaInfeccion.intentarInfectar(ciudad);
+        } else {
+            System.out.println("⚠️ Ciudad no encontrada.");
+        }
     }
 }

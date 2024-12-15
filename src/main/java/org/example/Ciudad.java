@@ -32,6 +32,6 @@ public class Ciudad {
 
     public void conectarCiudad(Ciudad ciudad) {
         ciudadesConectadas.add(ciudad);
-        ciudad.getCiudadesConectadas().add(this); // Conexión bidireccional.
+        ciudad.getCiudadesConectadas().add(this);
     }
 }
