@@ -12,16 +12,20 @@ public class Main {
         System.out.println("\nCiudades disponibles:");
         juego.mostrarEstadoCiudades();
 
-        System.out.print("\nElige la ciudad inicial para comenzar la infección: ");
-        String ciudadInicial = scanner.nextLine().trim();
-        Ciudad ciudadActual = juego.getCiudad(ciudadInicial);
+        Ciudad ciudadActual = null;
 
-        if (ciudadActual != null) {
-            reglaInfeccion.infectarCiudad(ciudadActual);
-        } else {
-            System.out.println("⚠️ Ciudad no encontrada. Fin del juego.");
-            return;
+
+        while (ciudadActual == null) {
+            System.out.print("\nElige la ciudad inicial para comenzar la infección: ");
+            String ciudadInicial = scanner.nextLine().trim();
+            ciudadActual = juego.getCiudad(ciudadInicial);
+
+            if (ciudadActual == null) {
+                System.out.println("⚠️ Ciudad no encontrada. Por favor, ingresa una ciudad válida.");
+            }
         }
+
+        reglaInfeccion.infectarCiudad(ciudadActual);
 
         while (!juego.todasLasCiudadesInfectadas()) {
             System.out.println("\nEstado actual:");
@@ -35,14 +39,14 @@ public class Main {
             if (ciudadSiguiente != null && ciudadActual.getCiudadesConectadas().contains(ciudadSiguiente)) {
                 ciudadActual = ciudadSiguiente;
 
-                System.out.print("¿Intentar infectar la ciudad " + ciudadSiguiente.getNombre() + "? (si/no): ");
+                System.out.print("¿Intentar infectar la ciudad " + ciudadSiguiente.getNombre() + "? (sí/no): ");
                 String respuesta = scanner.nextLine().trim();
 
                 if (respuesta.equalsIgnoreCase("si")) {
                     reglaInfeccion.infectarCiudad(ciudadSiguiente);
                 }
             } else {
-                System.out.println("⚠️ Movimiento no valido, intenta nuevamente.");
+                System.out.println("⚠️ Movimiento no válido, intenta nuevamente.");
             }
         }
 
