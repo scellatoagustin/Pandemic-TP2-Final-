@@ -8,7 +8,7 @@ public class Main {
         JuegoInfeccion juego = new JuegoInfeccion(reglaInfeccion);
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("🌍 ¡Bienvenido al simulador de infección!");
+        System.out.println("🌍 Bienvenido al simulador de infeccion.");
         System.out.println("\nCiudades disponibles:");
         juego.mostrarEstadoCiudades();
 
@@ -20,7 +20,7 @@ public class Main {
             ciudadActual = juego.getCiudad(ciudadInicial);
 
             if (ciudadActual == null) {
-                System.out.println("⚠️ Ciudad no encontrada. Por favor, elige una ciudad válida.");
+                System.out.println("⚠️ Ciudad no encontrada. Por favor, elige una ciudad valida.");
             }
         }
 
